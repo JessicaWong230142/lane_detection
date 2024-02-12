@@ -15,7 +15,7 @@ while True:
     updated_frame_with_lines = detect_lines(frame)
 
     #resizes frame to fit window
-    display_frame = cv2.resize(updated_frame_with_lines, dsize=(900, 500))
+    display_frame = cv2.resize(updated_frame_with_lines, dsize=(700, 400))
 
     #creates window to display lines and mask on frame
     cv2.imshow('lane detection', display_frame)
