@@ -52,13 +52,13 @@ def detect_lines(frame):
 
         #checks if two or more lines are detected
         if len(line_endpoints) >= 2:
-            #sets variables to store min x and y coords of the endpoints of first detected line
+            #sets variables to store min and max x and y coords of the endpoints of first detected line
             min_x1 = line_endpoints[0][0]
             max_x1 = line_endpoints[0][0]
             min_y1 = line_endpoints[0][1]
             max_y1 = line_endpoints[0][1]
 
-            #sets variables to store min x and y coords of the endpoints of second detected line
+            #sets variables to store min and max x and y coords of the endpoints of second detected line
             min_x2 = line_endpoints[0][2]
             max_x2 = line_endpoints[0][2]
             min_y2 = line_endpoints[0][3]
