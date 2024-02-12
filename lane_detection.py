@@ -10,17 +10,17 @@ def detect_lines(frame):
     height, width = frame.shape[:2]
 
     #calculates coordinates of rectangle mask using frame height and width
-    roi_size = min(height, width) // 2
-    roi_left = int((width - roi_size) / 2)
-    roi_top = int((height - roi_size) / 2)
-    roi_right = roi_left + roi_size
-    roi_bottom = roi_top + roi_size
+    mask_size = min(height, width) // 2
+    mask_left = int((width - mask_size) / 2)
+    mask_top = int((height - mask_size) / 2)
+    mask_right = mask_left + mask_size
+    mask_bottom = mask_top + mask_size
 
     #sets rectangle mask from frame
-    roi = frame[roi_top:roi_bottom, roi_left:roi_right]
+    mask = frame[mask_top:mask_bottom, mask_left:mask_right]
 
     #preprocesses frame with image processing: convert contents of rectangle mask to grayscale and finds edges in the mask
-    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(gray, 30, 100, apertureSize=3)
 
     #detects lines from canny edge detector
@@ -33,13 +33,15 @@ def detect_lines(frame):
 
         i = 0
 
+        # adapted from: https://docs.opencv.org/3.4/d9/db0/tutorial_hough_lines.html, date accessed: 2/7/24
+        # also adapted from: https://www.geeksforgeeks.org/line-detection-python-opencv-houghline-method/, date accessed: 2/8/24
         #loops over each detected line and sets its endpoints to match with coordinates in original frame
         for line in lines:
             x1, y1, x2, y2 = line[0]
-            x1 += roi_left
-            x2 += roi_left
-            y1 += roi_top
-            y2 += roi_top
+            x1 += mask_left
+            x2 += mask_left
+            y1 += mask_top
+            y2 += mask_top
 
             #draws detected lines onto original frame and stores endpoints in the list line_endpoints
             cv2.line(frame, (x1, y1), (x2, y2), (0, 0, 255), 3)
@@ -87,7 +89,7 @@ def detect_lines(frame):
                 counter += 1
 
     #draws rectangle around rectangle mask
-    cv2.rectangle(frame, (roi_left, roi_top), (roi_right, roi_bottom), (255, 255, 255), 2)
+    cv2.rectangle(frame, (mask_left, mask_top), (mask_right, mask_bottom), (255, 255, 255), 2)
 
     #returns frame with lines and rectangle mask drawn
     return frame
